@@ -1,0 +1,112 @@
+/*
+ *	style.css
+ *	UBC CPSC 259
+ */
+
+body {
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 2%;
+	margin-bottom: 2%;
+	color: #222;
+	background-color: #FFF;
+	font-size: 14px;
+	font-family: Franklin Gothic, Lucida Grande, Trebuchet MS, sans-serif;
+}
+
+span.centred {
+	display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+img.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+th, td { padding: 0px; }
+table { border-collapse:separate; border-spacing: 5px; }
+
+.container {
+	width: 100%;	
+}
+
+.boxed {
+	border:  groove #03F ;
+}
+
+.borderless {
+	border: 1;
+	margin:0 auto;
+	border-spacing: 1;
+}
+
+.sidebar {
+	width: 10%;
+	text-align:center;
+	font-size: 18px;
+}
+
+.maincontent {
+	/* width: 90%; */
+}
+
+td.twentypercent {
+	width: 20%;
+}
+
+.todo {
+	color: #F00;
+	font-weight: bold;
+	
+}
+
+.uline {
+  text-decoration: underline;
+}
+
+h1 {
+	text-align:center;
+}
+
+.centred {
+	margin-right: auto;
+	margin-left: auto;
+	text-align:center;
+}
+
+h2 {
+	width: 100%;
+	color: #FFF;
+	text-indent:3%;
+	text-transform: uppercase;
+	background-color:#2A1FAA;
+}
+
+h2.test {
+	width: 100%;
+	color: #000;
+	text-indent:3%;
+	text-transform: uppercase;
+	background-color:#DDD;
+}
+
+h3 {
+	width: 100%;
+	color: #111;
+	text-indent:1%;
+	text-transform: uppercase;
+	background-color:#EEE;
+}
+
+.deliverable {
+	color: #f00;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+li {
+	margin-top: .3em;
+}

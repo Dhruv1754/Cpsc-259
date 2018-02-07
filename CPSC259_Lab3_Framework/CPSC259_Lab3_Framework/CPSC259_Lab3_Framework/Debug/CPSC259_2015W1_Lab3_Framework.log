@@ -1,0 +1,12 @@
+﻿Build started 2015-08-30 14:04:57.
+     1>Project "C:\labs_updated_2015\lab3 docs and code bundles\in-lab exercise framework\CPSC259_2015W1_Lab3_Framework\CPSC259_2015W1_Lab3_Framework\CPSC259_2015W1_Lab3_Framework\CPSC259_2015W1_Lab3_Framework.vcxproj" on node 3 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt linkedlist.c
+         linkedlist.c
+     1>c:\labs_updated_2015\lab3 docs and code bundles\in-lab exercise framework\cpsc259_2015w1_lab3_framework\cpsc259_2015w1_lab3_framework\cpsc259_2015w1_lab3_framework\linkedlist.h(22): error C2016: C requires that a struct or union has at least one member
+     1>c:\labs_updated_2015\lab3 docs and code bundles\in-lab exercise framework\cpsc259_2015w1_lab3_framework\cpsc259_2015w1_lab3_framework\cpsc259_2015w1_lab3_framework\linkedlist.h(27): error C2016: C requires that a struct or union has at least one member
+     1>Done Building Project "C:\labs_updated_2015\lab3 docs and code bundles\in-lab exercise framework\CPSC259_2015W1_Lab3_Framework\CPSC259_2015W1_Lab3_Framework\CPSC259_2015W1_Lab3_Framework\CPSC259_2015W1_Lab3_Framework.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.22

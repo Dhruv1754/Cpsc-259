@@ -1,0 +1,7 @@
+﻿  lab2_in-lab_exercises.c
+c:\users\u\desktop\cpsc259-lab2_files\files\cpsc259_lab2_inlabexercises\cpsc259_lab2_inlabexercises\cpsc259_lab2_inlabexercises\lab2_in-lab_exercises.c(79): warning C4013: 'strlen' undefined; assuming extern returning int
+c:\users\u\desktop\cpsc259-lab2_files\files\cpsc259_lab2_inlabexercises\cpsc259_lab2_inlabexercises\cpsc259_lab2_inlabexercises\lab2_in-lab_exercises.c(106): warning C4013: 'strstr' undefined; assuming extern returning int
+c:\users\u\desktop\cpsc259-lab2_files\files\cpsc259_lab2_inlabexercises\cpsc259_lab2_inlabexercises\cpsc259_lab2_inlabexercises\lab2_in-lab_exercises.c(106): warning C4047: '!=': 'int' differs in levels of indirection from 'void *'
+c:\users\u\desktop\cpsc259-lab2_files\files\cpsc259_lab2_inlabexercises\cpsc259_lab2_inlabexercises\cpsc259_lab2_inlabexercises\lab2_in-lab_exercises.c(137): warning C4047: 'initializing': 'char *' differs in levels of indirection from 'int'
+  CPSC259_Lab2_InLabExercises.vcxproj -> C:\Users\u\Desktop\CPSC259-Lab2_files\files\CPSC259_Lab2_InLabExercises\CPSC259_Lab2_InLabExercises\Debug\CPSC259_Lab2_InLabExercises.exe
+  CPSC259_Lab2_InLabExercises.vcxproj -> C:\Users\u\Desktop\CPSC259-Lab2_files\files\CPSC259_Lab2_InLabExercises\CPSC259_Lab2_InLabExercises\Debug\CPSC259_Lab2_InLabExercises.pdb (Partial PDB)

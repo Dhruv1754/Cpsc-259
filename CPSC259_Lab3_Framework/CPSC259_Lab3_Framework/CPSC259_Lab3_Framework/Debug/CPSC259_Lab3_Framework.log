@@ -1,0 +1,10 @@
+﻿  linkedlist.c
+c:\users\u\desktop\cpsc259_lab3_framework\cpsc259_lab3_framework\cpsc259_lab3_framework\linkedlist.c(40): warning C4047: 'initializing': 'char' differs in levels of indirection from 'char [2]'
+c:\users\u\desktop\cpsc259_lab3_framework\cpsc259_lab3_framework\cpsc259_lab3_framework\linkedlist.c(190): warning C4101: 'temp': unreferenced local variable
+c:\users\u\desktop\cpsc259_lab3_framework\cpsc259_lab3_framework\cpsc259_lab3_framework\linkedlist.c(229): warning C4477: 'printf' : format string '%X' requires an argument of type 'unsigned int', but variadic argument 1 has type 'node **'
+c:\users\u\desktop\cpsc259_lab3_framework\cpsc259_lab3_framework\cpsc259_lab3_framework\linkedlist.c(212): warning C4101: 'i': unreferenced local variable
+c:\users\u\desktop\cpsc259_lab3_framework\cpsc259_lab3_framework\cpsc259_lab3_framework\linkedlist.c(307): warning C4033: 'remove_from_list' must return a value
+c:\users\u\desktop\cpsc259_lab3_framework\cpsc259_lab3_framework\cpsc259_lab3_framework\linkedlist.c(329): warning C4715: 'remove_from_list': not all control paths return a value
+c:\users\u\desktop\cpsc259_lab3_framework\cpsc259_lab3_framework\cpsc259_lab3_framework\linkedlist.c(413): warning C4715: 'insert_nth': not all control paths return a value
+c:\users\u\desktop\cpsc259_lab3_framework\cpsc259_lab3_framework\cpsc259_lab3_framework\linkedlist.c(361): warning C4715: 'retrieve_nth': not all control paths return a value
+  CPSC259_Lab3_Framework.vcxproj -> C:\Users\u\Desktop\CPSC259_Lab3_Framework\CPSC259_Lab3_Framework\Debug\Linked List.exe

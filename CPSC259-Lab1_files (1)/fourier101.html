@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="keywords" content="UBC, CPSC 259, C, Lab" />
+<meta name="description" content="UBC CPSC 259 Lab 1" />
+<meta name="generator" content="Dreamweaver" />
+<meta name="author" content="UBC" />
+<link rel="stylesheet" href="./style.css" type="text/css" />
+<title>Fourier 101</title>
+</head>
+
+<body>
+
+<h2>Fourier Transformation 101</h2>
+<p>In the first lab, we generate a quick, discrete Fourier transformation of a collection of tidal measurements in Northern BC.  Exactly what are we doing when we perform this analysis?  This document reviews the process, step-by-step.</p>
+
+<h3>Visualization</h3>
+<p>Here is a simple representation of a Fourier transformation from <a href="http://en.wikipedia.org/wiki/Fourier_transform" target="_blank">Wikipedia</a>.  We start with a group of data collected over the time domain, and we finish with the same data transformed to the frequency domain.  Actually, the Fourier transform can go back and forth between the two domains.&nbsp; Mesmerizing, isn't it!</p>
+<img class="displayed" src="http://upload.wikimedia.org/wikipedia/commons/5/50/Fourier_transform_time_and_frequency_domains.gif" alt="Fourier transformation, step by step"><p class = "centred">By Lucas V. Barbosa (Own work) [Public domain], <a href="http://commons.wikimedia.org/wiki/File%3AFourier_transform_time_and_frequency_domains.gif">via Wikimedia Commons</a></p>
+<p>And because it's discrete, we can capture a lot of relevant information (to recreate or approximate the function) using a relatively small set of samples.  In particular, the signal can be approximated well using the sum of a small, but sufficient number of cosines and sines -- with accuracy increasing as the number of terms increases.</p>
+<h3>Process</h3>
+<p>Here's what we're doing in this lab:</p>
+<ol>
+<li>We start with a collection of data.  The data are tidal measurements taken hourly 131,072 times.  Since we take a measurement every hour, we note that the SAMPLING_FREQUENCY = 24.  Note that 131,072 is 2<sup>17</sup>.</li>
+<li>Prepare the tidal frequency array in our program.  Iterate over the elements in the omega array and initialize each element so that<br /><br />
+	<span class="centred">omega[i] = i * the sampling frequency divided by the total number of readings</span><br />
+    The sampling frequency that we have to use when analyzing the discrete Fourier transform *has* to be the one that was used to measure the signal. There is only one correct value (in this case it's hourly, so SAMPLING_FREQUENCY = 24). Otherwise it will give us the wrong frequencies. Remember we're mixing ints and doubles here, and we want the results to be doubles, so we need to do some casting.</li>
+    <li>Use our C-language skills to copy the contents of the data file to the readings array.</li>
+    <li>Invoke the fast fourier transform.  We need to pass 4 parameters to the fft function.  Read the fft function comment to discover the parameters and their order.  The fft will change the values in the readings array, in much the same way we were able to directly change the values in the arrays with the reverse_array function during the in-lab exercises.</li>
+    <li>Avoid dealing with complex numbers.  After the Fourier transform has been completed, each element in the readings array corresponds to a reading in the complex_component array.  For each element in readings, square it, square the element with the same index in complex_components, add the two values, take the square root, and replace the original element in the readings array.  Once we do this, we're done with the complex_component array.  Forgeddaboutit!</li>
+    <li>
+    	<ol type="a">
+        <li>We should not examine every value stored in the transformed readings array.  It is enough to look through the first NUMBER_OF_READINGS / 2.  Why?  The discrete Fourier transform does not accurately represent the Fourier coefficients for values of omega large than NUMBER_OF_READINGS / 2 (it actually gives you the same as the first half, but in reverse order), and that is why they shouldn't be considered.</li>
+        <li>Scan through the frequencies array (omega) and the readings array to determine which frequency occurs the most.  We want to go through the elements in omega and make sure each one has a value greater than NOISE_FILTER.  If it is, and if the element in the corresponding index of readings is greater than whatever is stored in the amplitude variable, we can go ahead and store the new frequency in the frequency variable, and the new amplitude in the amplitude variable.  When we reach the end of NUMBER_OF_READINGS / 2, the two variables will contain the frequency that occured most, and its amplitude.  We're interested in the frequency.</li>
+        </ol>
+    </li>
+</ol>
+<h3>And that's it!</h3>
+</body>
+</html>

@@ -1,0 +1,461 @@
+?<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="keywords" content="UBC, CPSC 259, C, Lab" />
+<meta name="description" content="UBC CPSC 259 Lab 2" />
+<meta name="generator" content="Dreamweaver" />
+<meta name="author" content="UBC" />
+<link rel="stylesheet" href="./style.css" type="text/css" />
+<title>CPSC 259 Lab 2 - September 2017</title>
+</head>
+
+<body>
+<div class="container"> <!-- contains all web content --> 
+    
+    <!-- CONTENTS -->
+    <h1>UBC CPSC 259 Lab 2 September 25 - September 29, 2017</h1>
+    <div class="contents">
+        <h2>Contents</h2>
+        <ol>
+            <li><a href="#objectives">Objectives</a></li>
+            <li><a href="#prelab">Pre-lab Reading</a></li>
+            <li><a href="#inlab">In-Lab Exercises</a></li>
+            <li><a href="#takehome">Take-home Assignment</a></li>
+            <li><a href="#deliverables">Deliverables</a></li>
+            <li><a href="#hints">Helpful Hints</a></li>
+        </ol>
+    </div>
+    <!-- END OF CONTENTS --> 
+    
+    <!-- LEARNING OBJECTIVES -->
+    <div class="objectives">
+        <h2 id="objectives">1. Objectives for this lab</h2>
+        <ol>
+            <li>Implement indirection and gain experience using pointers to dynamically manage memory</li>
+            <li>Build competence with file input/output by continuing to parse structured data files</li>
+            <li>Implement a simple string matching algorithm</li>
+            <li>Add some helpful utility functions to your C programming repertoire by learning how to use some of the functions from string.h. </li>
+        </ol>
+    </div>
+    <!-- END OF LEARNING OBJECTIVES --> 
+    
+    <!-- PRE-LAB READING -->
+    <h2 id="prelab">2. Pre-lab reading</h2>
+    <table>
+        <tr>
+            <td class="sidebar"><div class="todo">TO-DO</div></td>
+            <td>The Pre-lab section of the lab summarizes the preparations you need to make <strong><span class="uline">prior</span></strong> to each lab, so you are ready to begin when you arrive at the start of your lab session. It is important to be prepared for the lab because you will be working in pairs.<br />
+                <br />
+                You should always read the <strong>entire</strong> lab prior to your lab session, but often there are other things you will need to do in addition to just reading the description. Look for the <span class="todo">TO-DO</span> for the major tasks.</td>
+        </tr>
+    </table>
+    
+    <!-- PRE-LAB READING: DIFFERENT DOMAINS -->
+    <h3>Programming for different scientific domains</h3>
+    <p>Welcome back to the CPSC 259 lab.  We covered a lot in the first lab -- you reviewed some key concepts from APSC 160; you learned how to use fgets and sscanf to parse a file line by line; you learned how to use blackboxed code; you learned how to apply a Fourier analysis to a set of evenly spaced measurements to determine a tidal frequency.  That's a lot.  This lab is much shorter.</p>
+    <p>One of the things we would like you to think about this term is how data structures and algorithms are used when programming for <strong>different scientific domains</strong>.  In this spirit, lab 2 explores <strong>bioinformatics</strong>.  Bioinformatics integrates computer science, statistics, molecular biology, and biotechnology to increase the understanding of biological processes.  Computing tools and computational thinking are applied to research efforts that include sequence alignment, genome assembly, protein structure alignment, and more.  There is a good general overview of the field in the Wikipedia article about bioinformatics at <a href="http://en.wikipedia.org/wiki/Bioinformatics">http://en.wikipedia.org/wiki/Bioinformatics</a> -- but don't read it unless you have time.  Everything you need to know is below.</p>
+    
+    <!-- PRE-LAB READING: BIOINFORMATICS -->
+    <h3>Bioinformatics</h3>
+    <p>Bioinformatics is largely associated with projects like the <a href="http://www.ornl.gov/sci/techresources/Human_Genome/home.shtml">Human Genome Project</a> (1990-2003).  The genome is the entirety of an organism's hereditary information (its complete set of genes). It is encoded in DNA (deoxyribonucleic acid) or, for many types of virus, in RNA (ribonucleic acid).</p>
+    <p><strong>We're going to look at DNA in this lab, so let's introduce some of the terms we will use.</strong></p>
+    <p>A DNA molecule or strand is a sequence of molecular units called <strong>bases</strong> or <strong>nucleotides</strong> (these are synonyms). There are four types, denoted A (<strong>adenine</strong>), C (<strong>cytosine</strong>), G (<strong>guanine</strong>), and T (<strong>thymine</strong>).  Each strand of the familiar double-helix human DNA molecule contains about 3 billion of these nucleotides.  There are two strands of DNA in the double helix, and each is a complementary copy of the other: <strong>an "A" on one strand is always paired with a "T" on the other, and a "C" is always paired with a "G"</strong>. Sometimes we call these base pairs.  Since reconstructing the base sequence of one strand is trivial if we have the sequence of the other, we really only need to study one strand to understand what a particular section of DNA does.</p>
+    <p>In our genetic code, <strong>three nucleotides (i.e., three "letters") of DNA form a codon</strong> and specify a single amino acid.  There are 20 common types of amino acids.  A <strong>protein</strong> molecule is nothing more than a long strand of <strong>amino acids</strong>.  The amino acids determine the shape of the protein and, consequently, its function in the cell which makes it.  DNA does not wear out quickly, compared with proteins. This makes DNA well suited for data storage in the cell.  DNA is essentially a biological data structure.</p>
+    <p>A <strong>gene</strong> is a (usually long) sequence of codons and thus specifies a sequence of amino acids (a protein).  Our genetic code is a fixed-length code: there are exactly three nucleotides in the code word (codon) for every amino acid. Why do you think the genetic code uses three DNA units per codon, rather than one or two units per codon? How many codons would there be if there were two units per codon? Why not four or more units per codon?</p>
+    <p>Each entry in the <strong>Table 2.1</strong> below lists a codon — three capital letters representing DNA nucleotides — and an amino acid or the word "stop". For example, TCT speci?es the amino acid serine. The <strong>stop codons</strong>, TAA, TAG, and TGA, tell the cell's translational machinery that the end of a gene has been reached. Notice that more than one codon can specify the same amino acid, and thus more than one DNA sequence can specify the same protein. For example, the protein fragment methionine-isoleucine-phenelalanine-aspartic acid-glycine is coded by ATGATCTTTGACGGG and also by ATGATTTTTGATGGT.</p>
+    <table class="borderless" >
+        <caption>
+        <strong>Table 2.1 The genetic code.</strong>
+        </caption>
+        <tr>
+            <td><strong>TTT</strong> phenylalanine</td>
+            <td><strong>TCT</strong> serine</td>
+            <td><strong>TAT</strong> tyrosine</td>
+            <td><strong>TGT</strong> cysteine</td>
+        </tr>
+        <tr>
+            <td><strong>TTC</strong> phenylalanine</td>
+            <td><strong>TCC</strong> serine </td>
+            <td><strong>TAC</strong> tyrosine</td>
+            <td><strong>TGC</strong> cysteine</td>
+        </tr>
+        <tr>
+            <td><strong>TTA</strong> leucine </td>
+            <td><strong>TCA</strong> serine</td>
+            <td><strong>TAA stop </strong></td>
+            <td><strong>TGA stop</strong></td>
+        </tr>
+        <tr>
+            <td><strong>TTG</strong> leucine </td>
+            <td><strong>TCG</strong> serine</td>
+            <td><strong>TAG stop </strong></td>
+            <td><strong>TGG</strong> tryptophan</td>
+        </tr>
+        <tr>
+            <td><strong>CTT</strong> leucine </td>
+            <td><strong>CCT</strong> proline</td>
+            <td><strong>CAT</strong> histidine </td>
+            <td><strong>CGT</strong> arginine</td>
+        </tr>
+        <tr>
+            <td><strong>CTC</strong> leucine </td>
+            <td><strong>CCC</strong> proline </td>
+            <td><strong>CAC</strong> histidine </td>
+            <td><strong>CGC</strong> arginine</td>
+        </tr>
+        <tr>
+            <td><strong>CTA</strong> leucine </td>
+            <td><strong>CCA</strong> proline </td>
+            <td><strong>CAA</strong> glutamine </td>
+            <td><strong>CGA</strong> arginine</td>
+        </tr>
+        <tr>
+            <td><strong>CTG</strong> leucine </td>
+            <td><strong>CCG</strong> proline</td>
+            <td><strong>CAG</strong> glutamine </td>
+            <td><strong>CGG</strong> arginine</td>
+        </tr>
+        <tr>
+            <td><strong>ATT</strong> isoleucine </td>
+            <td><strong>ACT</strong> threonine </td>
+            <td><strong>AAT</strong> asparagine </td>
+            <td><strong>AGT</strong> serine</td>
+        </tr>
+        <tr>
+            <td><strong>ATC</strong> isoleucine </td>
+            <td><strong>ACC</strong> threonine </td>
+            <td><strong>AAC</strong> asparagine</td>
+            <td><strong>AGC</strong> serine</td>
+        </tr>
+        <tr>
+            <td><strong>ATA</strong> isoleucine </td>
+            <td><strong>ACA</strong> threonine </td>
+            <td><strong>AAA</strong> lysine </td>
+            <td><strong>AGA</strong> arginine</td>
+        </tr>
+        <tr>
+            <td><strong>ATG</strong> methionine </td>
+            <td><strong>ACG</strong> threonine </td>
+            <td><strong>AAG</strong> lysine </td>
+            <td><strong>AGG</strong> arginine</td>
+        </tr>
+        <tr>
+            <td><strong>GTT</strong> valine </td>
+            <td><strong>GCT</strong> alanine </td>
+            <td><strong>GAT</strong> aspartic acid </td>
+            <td><strong>GGT</strong> glycine</td>
+        </tr>
+        <tr>
+            <td><strong>GTC</strong> valine </td>
+            <td><strong>GCC</strong> alanine </td>
+            <td><strong>GAC</strong> aspartic acid </td>
+            <td><strong>GGC</strong> glycine</td>
+        </tr>
+        <tr>
+            <td><strong>GTA</strong> valine </td>
+            <td><strong>GCA</strong> alanine </td>
+            <td><strong>GAA</strong> glutamic acid </td>
+            <td><strong>GGA</strong> glycine</td>
+        </tr>
+        <tr>
+            <td><strong>GTG</strong> valine </td>
+            <td><strong>GCG</strong> alanine </td>
+            <td><strong>GAG</strong> glutamic acid </td>
+            <td><strong>GGG</strong> glycine</td>
+        </tr>
+    </table>
+    <p>Now suppose we have a portion of DNA and we wish to find out which proteins it encodes.  Since we don't know whether or not we have the beginning of the DNA sequence, and since we very likely have a piece from somewhere in the middle, we don't know where to start reading.  Which base pair is the first base pair?  Which end do we start reading from?  Does the fragment begin correctly at a codon boundary, or does it begin with the last one or two units of a disected codon?  As you may imagine, it is important to choose where to start our translation and where to stop (we already know where to stop because of the "stop codes", TAA, TAG and TGA).</p>
+    <p>Sequencing the genome is a good example of the enormous impact of computer science in bioinformatics.  The human genome would still be a mystery without: computer algorithms for searching and sorting; sophisticated storage and retrieval strategies; information visualization tools; and clusters of high-performance computing machines.  The publication of the first draft of the human genome in 2001 was a pivotal moment in biology.  For example, we previously estimated that the human genome contained approximately 100,000 genes; this number was revised down to 20,000 - 25,000.  Additionally, <strong>interspersed between and even within some genes is a great deal of DNA which does not seem to specify any protein</strong>.  Scientists are still learning about its purpose.</p></p>
+    <div class="boxed">
+        <h3>Working with Strings</h3>
+        <p>In this lab, we are going to work with strings.&nbsp; The C programming language includes these and other helpful functions for working with strings.&nbsp; They are included in the string.h library.&nbsp;We can use these functions by adding this preprocessor directive to the top of our source file (if it is not already there!):</p>
+        <code>#include &lt;string.h&gt;</code>
+        <dl>
+            <dt><br />
+                <code>char * strncat(char * s1, const char * s2, size_t n);</code></dt>
+            <dd><br />
+                The strncat() function appends not more than n bytes (a null byte and any bytes that follow it are not appended) from the string pointed to by s2 to the end of the string pointed to by s1. The initial byte of s2 overwrites the null byte at the end of s1. A terminating null byte is always appended to the result.  The strncat() function returns s1.</dd>
+            <dt><br />
+                <code>char * strdup(const char * s1);</code></dt>
+            <dd><br />
+                The strdup() function copies the string pointed to by s1, and returns a pointer to the new string.  The returned pointer can be passed to free(). A null pointer is returned if the new string cannot be created.  The strdup() function returns a pointer to a new string on success. <strong>[Note: The VS2012 compiler may complain about the strdup() function.  If it does, try replacing it with the Microsoft version, _strdup]</strong></dd>
+            <dt><br />
+                <code>size_t strlen(const char * s);</code></dt>
+            <dd><br />
+                The strlen() function computes and returns the number of bytes in the string to which s points, not including the terminating null byte.</dd>
+            <dt><br />
+                <code>int strncmp(const char * s1, const char * s2, size_t n);</code></dt>
+            <dd><br />
+                The strncmp() function compares not more than n bytes (bytes that follow a null byte are not compared) from the string pointed to by s1 to the string pointed to by s2.  Upon successful completion, strncmp() returns an integer greater than, equal to or less than 0, if the possibly null-terminated string pointed to by s1 is greater than, equal to or less than the possibly null-terminated string pointed to by s2 respectively.</dd>
+            <dt><br />
+                <code>char * strncpy(char * s1, const char * s2, size_t n);</code></dt>
+            <dd><br />
+                The strncpy() function copies not more than n bytes (bytes that follow a null byte are not copied) from the string pointed to by s2 to the string pointed to by s1.  If the string pointed to by s2 is shorter than n bytes, null bytes are appended to the copy in the string pointed to by s1, until n bytes in all are written.  The strncpy() function returns s1.</dd>
+            <dt><br />
+                <code>char * strstr(const char * s1, const char * s2);</code></dt>
+            <dd><br />
+            The strstr() function locates the first occurrence of the sequence of bytes pointed to by s2 (excluding the terminating null byte), in the sequence of bytes pointed to by s1. Upon successful completion, strstr() returns a pointer to the located substring or a null pointer if the string is not found. If s2 points to a string with zero length, the function returns s1.</dd>
+        </dl>
+    </div>
+    <p><!-- IN-LAB EXERCISES --> </p>
+    <h2 id="inlab">3. In-lab Exercises</h2>
+    <p>In-lab exercises are pair exercises. <strong>Select a new partner quickly and remember to exchange contact information right away</strong>.  You must choose a new partner, and you may not work alone.</p>
+    <p>Remember to practice <strong>Pair Programming</strong>.  Take turns driving (typing) and navigating (watching, correcting).</p>
+    <p>If you're not sure about something, check the lecture slides, the textbook, and the web, or ask a TA.  Remember that copying code, even snippets, is plagiarism.  If you do find some code on the net for something common (like an insertion sort algorithm), remember to include the website's URL in your function comments.  Make sure you understand how it works.  You will answer questions about your lab individually.</p>
+    <p><strong>REMINDER: In the computer science labs, you must use drive Z: to store any files and directories that you create, including projects for Visual Studio.  Make sure you save your projects on drive Z: in order to keep them in your ugrad account</strong>.  You might want to use a USB memory stick to take a copy of the code home when you're done.</p>
+    <p>This week in the lab you will practice using pointers and dynamic memory management.  For your take-home lab, you and your partner will write a small program to sift through some DNA and solve a mystery.  You might find some of your in-lab code useful for your take-home program.</p>
+    <h3><span class="todo">TO-DO #1:</span> POINTERS AND DYNAMIC MEMORY MANAGEMENT</h3>
+    
+    <!-- START THE ORDERED LIST OF STEPS -->
+    <ol start="0">
+        <li><strong>Choose a new partner and exchange contact information</strong>.  Get his or her first and last name, email address (one that they use at least once or twice a day), and cell number.  You will need to coordinate schedules in order to meet for the take-home component.  It would be a good idea to set aside 4-6 hours to complete the take-home, in digestible 2-hour 'chunks'.  Start early, and don't wait until the night before it's due.  Ask questions in Piazza or visit a TA during office hours if you get stuck.  Remember not to post any specific code!</li>
+        <li>Start Visual Studio 2012 Professional by double clicking its icon on the desktop or, if it is not there, by choosing <strong>Start/All Programs/Microsoft Visual Studio 2012/Visual Studio 2012</strong>.  If you are asked to choose your default environment settings, select <strong>Visual C++ Development Settings</strong>.</li>
+        <li>Download the framework we have created for you here: <a href="./files/CPSC259_Lab2_InLabExercises.zip" title="In Lab Exercises">CPSC259_Lab2_InLabExercises.zip</a>.  If you are using a lab computer make sure you download it to the <strong>Z: drive</strong>.  Unzip the folder.</li>
+        <li>In Visual Studio, choose <strong>Menu: File -> Open -> Project/Solution</strong>.  Navigate to the folder you just unzipped, and choose the CPSC259_Lab2_InLabExercises.sln file.  Choose <strong>Open</strong>.  The partially implemented project will open.  Ignore any security warnings.</li>
+        <li>This solution contains two projects.  The first project is called CPSC259_Lab2_InLabExercises, and the second is called CPSC259_2015W1_Lab2_UnitTests.  Expand the Header Files and Source Files folders in each of the projects.  You should see a total of 3 different files in the projects.<br />
+            <a href="./images/inlabexercises.png"><img src="./images/inlabexercises.png" width="900" alt="In-lab exercises" /></a></li>
+        <li>Your goal is to <strong>implement the functions in the lab2_in-lab_exercises.c source file</strong> and run and pass all of the unit tests.  Remember not to change the unit test code.  You should only edit the code in the lab2_in-lab_exercises.c file.  You may find some of these functions useful for completing your take-home programming assignment.</li>
+        <li><strong>Here is the challenge: you must use pointer notation in your implementations.  So for example, when you are looping inside a for-loop, instead of iterating through a string using square brackets, you must do it using the dereference operator (asterisk, a.k.a. "*") and offsets.  See line 24 inside the main.c function for an example, or your lecture notes</strong>.</li>
+        <li>The best way to do this is sequentially.  Here's a good algorithm for proceeding with this lab:
+            <ol>
+                <li>Execute the unit tests.  Open the Test Explorer if it is closed.  You can do this by choosing <strong>Menu: Test -> Windows -> Test Explorer</strong>.  In the Test Explorer, choose <strong>Run All</strong>.  It takes a few moments for the unit test framework to load for the first time, so be patient.</li>
+                <li>While there are unit tests that fail:
+                    <ol>
+                        <li>Pick the first unit test that failed</li>
+                        <li>Read the unit test code to determine which function it is testing, and what is being tested.</li>
+                        <li>Examine the function being tested and make changes (refactor) the code (<strong>DO NOT CHANGE THE UNIT TEST CODE</strong>).</li>
+                        <li>Re-build the project.</li>
+                        <li>Re-run the unit tests</li>
+                        <li>When you pass all the unit tests for one of the functions, show a TA and collect your marks.</li>
+                    </ol>
+                </li>
+            </ol>
+        </li>
+        <li>Remember that the Test Explorer is done when the bar stops spinning and turns either solid red or solid green.  Solid green means all the unit tests passed.  Solid red means one or more unit tests failed.  Below the bar, you should see a list of the tests, some passed and some failed.></li>
+    </ol>
+    <p>Remember that with <code>malloc</code>, <code>calloc</code>, <code>realloc</code>, and <code>free</code>, all defined in the <code>stdlib.h</code> header file, you can move your memory consumption from the runtime stack to the heap.  Your TA might ask you why this is a good idea.</p>
+    <div class="boxed">
+    <h3>Debugging Pointers: A trick!</h3>
+    <ol>
+    <li>When you declare a pointer, and you allocate a block of memory to it that contains a collection of identical items, you can "watch" that variable, defined with the appropriate size in the <strong>Watch</strong> tab, to see how the elements in the block vary through execution. This is handy because Visual Studio assumes in the <strong>Locals</strong> view that pointers only point to a single instance of their type.</li>
+    <li>Here's what we mean.  In the in-lab source file, we declared an int *  called <code>pointer_to_some_ints</code> (line 18), dynamically allocated some memory and pointed <code>pointer_to_some_ints</code> at it (line 22), and then populated the memory with some numbers (lines 23-25).  Set a breakpoint at line 27, and then Start Debugging (F5).  Here's what we see in the <strong>Locals</strong> tab:<br />
+<a href="images/viewpointerinlocals.png"><img src="images/viewpointerinlocals.png" width="900" alt="Viewing a pointer in Locals" /></a></li>
+<li>Now that can't be right.  According to the code in the main function, the pointer <code>pointer_to_some_ints</code> is pointing to a block of memory which contains 25 integers.  So how can we look at that block of memory?</li>
+<li>Here's a handy Visual Studio trick for working with pointers. The <strong>Debugger</strong> should still be running. If you stopped it, start debugging again, and wait until execution reaches the breakpoint again and pauses. Right-click the <code>pointer_to_some_ints</code> variable in the <strong>Locals</strong> tab, and choose Add watch:<br />
+<a href="images/addawatch.png"><img src="images/addawatch.png" width="900" alt="Adding a watch" /></a></li>
+<li>Here's the handy part. Move to the <strong>Watch 1</strong> tab, and double click the <code>pointer_to_some_ints</code> variable. Change it from <code>pointer_to_some_ints</code> to <code>pointer_to_some_ints, 25</code> (don't forget the comma) and then enter:<br />
+<a href="images/definesize.png"><img src="images/definesize.png"  alt="Defining the size" /></a></li>
+<li>When you click on the plus symbol which appears next to the <code>pointer_to_some_ints</code> variable, you will see the block of memory and the 25 integers inside:<br />
+<a href="images/watch.png"><img src="images/watch.png" width="900" alt="Watching a pointer variable" /></a></li>
+<li>You only have to do this once for a pointer.  Every time you use the <strong>Debugger</strong> and set a breakpoint, when execution pauses at the breakpoint you can open the <strong>Watch 1 </strong>tab and see what's in the memory block pointed to by <code>pointer_to_some_ints</code>.  Try setting a breakpoint at line 19 (before the memory has been allocated and assigned) or line 22 (after the memory has been allocated and assigned, but before it has been populated) and restart the <strong>Debugger</strong> to see what we mean.</li>
+
+</ol>
+    </div>
+    
+    <!-- TAKE-HOME ASSIGNMENT -->
+    <h2 id="takehome">4. Take-Home Assignment</h2>
+    <p>A drop of blood is found in a second floor lab in MacLeod, and an irreplaceable antique oscilloscope is missing.  The RCMP arrive and find that nobody is hurt.  They retrieve a partial DNA sample from the droplet and take it to their campus lab.</p>
+    <p>You and your partner are off campus having a coffee, reading Donald Knuth's <em>The Art of Computer Programming</em> and keeping an eye on <a href="http://stackoverflow.com">stackoverflow.com</a>, when your phone rings.  The caller is a friend of yours who works for the RCMP in the campus lab, and she is distressed.  One of the interns was coding something, and there has been a veritable catastrophe, she gasps.  She tells you that the intern took CPSC 259 last year and decided to rewrite the lab's DNA matching program, which happens to be written in C.  He accidentally deleted the program.  The lab assistant who's usually on call for this sort of computer thing is on holiday and cannot be reached.  Your friend mentioned your names, and the RCMP would like an initial analysis done quickly.</p>
+    <p>The RCMP cruiser that greets you at the front of the shop takes you to the lab.  Once you're there you sit down at one of the computers and take stock.  The executable is gone, but you find an old iteration of the framework that the forensic tech used to write the program.  You also learn that the DNA has been analyzed, and the result has been encoded as <strong>a string of characters representing a segment of nucleotides</strong>.  The RCMP has some likely suspects who have also provided DNA in the past, and their candidate samples are in the same file.  You and your partner breath a sigh of relief, because you realize that the algorithm used to match the samples is pretty simple, and you break down your task as follows:</p>
+    <ol>
+        <li>Download the framework we have created for you <a href="files/CPSC259_Lab2_Takehome.zip" title="Take home framework">here</a>.  If you are using a lab computer make sure you download it to the <strong>Z: drive</strong>.  Unzip the folder.  This is a partially implemented Visual Studio 2012 project.  The code you need to implement is in the file <code>dna.c</code>.  <strong>The only code you need to complete is in the the <code>analyze_segments</code> and <code>calculate_scores</code> functions.</strong></li>
+        <li>Since this is an early iteration of the program, it is very simple and only has a <strong>command-line interface</strong>.  There's no GUI, or graphical user interface.</li>
+        <li>Your program begins by presenting the user with a <strong>menu</strong>.  The menu choices are: <strong>1. Load file, 2. Perform analysis, 3. Exit</strong>.  The user must enter the number of their choice.  Anything else is ignored, and the menu is offered again.  You are not responsible for knowing how the menu code works, but if you're interested, take a peek!</li>
+        <li><strong>If the user chooses 1</strong>, your program asks the user for the DNA data file name, and then tries to open the file and copy its contents to some dynamically allocated memory.  If the program cannot open the file, it prints an appropriate message and returns to the main menu. <strong>[Note that we have included 3 test files for you in the Resources folder of this project: long_sample.txt, short_sample.txt, and perfect_match.txt.  The correct output for each of these files is also provided in order to help you determine the correctness of your implementation]</strong></li>
+        <li>The DNA data file will always be exactly as we describe it here. The file will never consist of anything else.  We have provided the code which opens the file and copies it to dynamic memory.  The file contains a sample segment, and one or more candidate segments which are always at least as long as the sample segment.  The candidate segments are never shorter than the sample segment.  All of the segments are stored as strings of characters that end with a newline character.  You may not make any assumptions about how long the sample is. It could be millions of characters long.  Candidate segments are always equal in length or longer than the sample taken at the crime scene, never shorter</strong>:
+            <pre>Sample
+ACGGACTGAT
+2
+Candidate 1
+ACGTACCGATCGTACGATGCTA
+Candidate 2
+ACGTCCGCTAGCGAGCTGGCGCATTAGCGATAGCGGACGGGCTGCT</pre>
+        </li>
+        <li><strong>If the user chooses 3</strong>, the program execution ends (we've written this for you).</li>
+        <li><strong>If the user chooses 2</strong>, and a file has <strong>not</strong> already been opened and copied to the heap, nothing happens.&nbsp; The menu asks the user what to do again (we've written this for you).        
+            
+        <li><strong>If the user chooses 2</strong>, and a file has already been opened and copied to the heap, the program immediately begins the analysis <strong>(you need to write the code that does this)</strong>:
+                
+             
+        <ol>
+            <li>Look for a perfect match between the sample and each of the candidates.&nbsp; Test each candidate sequence.&nbsp; When testing for a perfect match, you must test the entire length of the sample, even any trailing nucleotides.  A <strong>perfect match</strong> is when a sample and a candidate sequence are the exact same length and contain the exact same characters.  Each time your program finds a perfect match, it must print a message to standard output that says which candidate(s) is a perfect matche(s):<br />
+                <pre>Candidate number XXX is a perfect match.
+Candidate number YYY is a perfect match.</pre>
+            Where <code>XXX</code>, and <code>YYY</code> are determined from their order in the list of candidates (excluding the sample, of course) provided in the text file.  <strong class="uline">If there are one or more perfect matches, after you print this perfect match message for each perfect match, you do not need to print anything else or calculate any other scores, your program should return to the menu.</strong> </li>
+            <li>If there are no perfect matches, then a <strong>best match</strong> must be found for each sample-candidate pair.  The program must give each candidate a score:
+                <ol>
+                    <li>Each score begins at 0.</li>
+                    <li>Let <strong>LENGTH</strong> be the number of <strong>codons</strong> (groups of 3 nucleotides) in the sample (remember that the sample is always equal in length, or shorter than the candidates).  Ignore any trailing nucleotides in the sample (there may be 1 or 2, but not more).  In other words, if (sample length % 3) is not equal to zero, we ignore (sample length % 3) final nucleotides in the sample. [% is the modulus operator: 3 % 3 = 0; 4 % 3 = 1; 7 % 3 = 1; 8 % 3 = 2.</li>
+                    <li>For each of the <strong>LENGTH</strong> codons, if the two codons (sample and candidate) are exactly the same, <strong>add 10</strong> to the score.  Else if the 2 codons are different but specify the same amino acid, <strong>add 5</strong> to the score.</li>
+                    <li>For each of the <strong>LENGTH</strong> codons you just compared, <strong>if they are not identical, e.g., you did not just add 10 to the score, and if they do not specify the same amino acid, e.g., you did not just add 5 to the score</strong>, you must examine the 3 <strong>nucleotides</strong> in the codon separately.  For each of the three nucleotides in the codon, if the  character in the sample and candidate is the same, <strong>add 2</strong> to the score. If the 2 characters belong to a matching base pair (adenine and thymine, or cytosine and guanine), <strong>add 1</strong> to the score. Otherwise, <strong>add 0</strong> to the score. Store the result.</li>
+                    <li>Since the candidate is always longer than the sample, after you have checked the first <strong>LENGTH</strong> codons, you will have to shift the sample along the length of the candidate by 1 codon (aka 3 nucleotides aka 3 letters), and check the score of this new alignment (so now you're aligning the first codon, or 3 letters, of the sample with the second codon (letters 4, 5, 6) in the candidate, or using a <strong>codon offset</strong> of 1).  Store the score, and then do it again, e.g., use a <strong>codon offset</strong> of 2.  Keep shifting the sample deeper into the candidate by a codon at a time and checking the score until it no longer fits.  (Remember to ignore trailing nucleotides).  As soon as the sample extends beyond the length of the candidate your program must stop shifting and checking the scores for that candidate.  The score for this candidate is the <strong>highest</strong> of all these results.  Here's a visual representation of what you will do for each Candidate:<br />
+            <a href="images/algorithm.png"><img src="images/algorithm.png" width="900" alt="Shifting algorithm" /></a></li>
+                    <li>Print the results for all the candidates to standard output (the screen).  Each line should look like this:<br />
+                        <pre>Candidate number XXX matches with a score of ###.</pre></li>
+                </ol>
+            </li>
+        </ol>
+        <li><strong>Think about how to implement the solution before you start coding</strong>.  Spend some time with your partner and consider:<br />
+            <ul>
+                <li>What are the inputs to the problem?</li>
+                <li>What are the types of the inputs?</li>
+                <li>What format does the solution have?</li>
+                <li>Have the prototypes for any helpful functions already been provided?</li>
+                <li>Have any helpful functions already been implemented?</li>
+                <li>What are you required to print to the screen?</li>
+				<li>Does knowing that the candidate length >= the sample length help us?</li>
+                <li>How efficiently can your solution perform?  Does it have to comb through segments more than once?  How can you combine searches?  Or does it make sense to sacrifice some speed for readability and maintainability?</li>
+            </ul>
+        </li>
+        <li><strong>Use pen and paper, or Notepad/Word or equivalent, to design your DNA analysis algorithm</strong> (an algorithm is what computer scientists call a recipe for a solution).  Refer to the requirements explained in the previous points.  Use "plain English" to describe, line by line, how your algorithm should work.  Use braces to surround loops, and specify the bounds.  You should do this <strong>before</strong> you begin coding the algorithm.</li>
+    </ol>
+    
+    <!-- DELIVERABLES -->
+    <h2 id="deliverables">5. Deliverables</h2>
+    <p>There are in-lab and take-home deliverables for this lab:</p>
+    <h3><span class="deliverable">In Lab Deliverable</span> Marks and Due Date:</h3>
+    <table>
+        <tr>
+            <td class="twentypercent">Attendance (pro-rated for lateness)</td>
+            <td><strong>10</strong> marks</td>
+        </tr>
+        <tr>
+            <td>Pair Programming</td>
+            <td><strong>10</strong></td>
+        </tr>
+        <tr>
+            <td>Function 1</td>
+            <td><strong>10</strong> 5 marks for passing all unit tests, 5 for using pointer notation</td>
+        </tr>
+        <tr>
+            <td>Function 2</td>
+            <td><strong>10</strong> 5 marks for passing all unit tests, 5 for using pointer notation</td>
+        </tr>
+        <tr>
+            <td>Function 3</td>
+            <td><strong>10</strong> 5 marks for passing all unit tests, 5 for using pointer notation</td>
+        </tr>
+        <tr>
+            <td>Function 4</td>
+            <td><strong>10</strong> 5 marks for passing all unit tests, 5 for using pointer notation</td>
+        </tr>
+        <tr>
+            <td><strong>TOTAL:</strong></td>
+            <td><strong>60 marks</strong></td>
+        </tr>
+    </table>
+    <p>Remember to demonstrate your passed unit tests to the TAs <strong>after you pass the tests for each function</strong>, in order to avoid any marking bottleneck at the end of the lab. <span class="uline"><strong>You have until the end of the second Lab 2 meeting to demonstrate your in-lab deliverables to a TA</strong></span>.</p>
+    <h3><span class="deliverable">Take Home Deliverable</span> You need to submit these files:</h3>
+    <p>You and your partner must submit a fully-functioning DNA string comparison program that implements the requirements outlined in this document. <strong>Pay careful attention to your due date</strong>.
+    
+    <ol>
+        <li>dna.h</li>
+        <li>dna.c</li>
+        <li>README.txt (see below)</li>
+    </ol>
+    <h3><span class="deliverable">Take Home Deliverable</span> Your README.txt must contain these items:</h3>
+    <p>Create your <strong>README.txt</strong> file using Notepad or equivalent.  It must contain:</p>
+    <ol>
+        <li>The same information as the comments at the top of the file along with any additional notes you would like your TA to read</li>
+        <li>Details about how you tested your program for correctness</li>
+        <li>We'd also like to know what you found challenging about this assignment, and how you overcame those challenges</li>
+        <li>Tell us how many hours each of you worked on this assignment</li>
+        <li>Tell us (roughly) what percentage of the assignment each of you was responsible for</li>
+  <li>Any other comments about the division of the workload? Reminder: we expect both partners to contribute equally to the assignment.</li><li><strong>Your README.txt must include the following statement: "We have read and understood the
+            plagiarism policies at https://www.cs.ubc.ca/our-department/administration/policies/collaboration and we understand that no excuse for plagiarism will be accepted, including any listed in http://www.cs.ubc.ca/~tmm/courses/cheat.html".</strong></li>
+    </ol>
+    <h3><span class="deliverable">Take Home Deliverable</span> This is how you must submit your work:</h3>
+    <ol>
+    <li>Your take-home assignment is due at 11:59 PM the night before Lab 3 begins.</li>
+        <li>Zip your submission.  You must only submit the files specified in the "You need to submit these files" section. <strong>Do NOT include any additional files.  If you submit additional files you will lose marks</strong>.</li>
+        <li>Ensure that both of your names, student numbers and CS IDs appear in the comments at the top of every file.  You will lose marks if you omit this.</li>
+        <li>Remember that if you develop on a different computer, you are responsible for ensuring that your program will compile and execute in Visual Studio 2012 Professional in the lab.</li>
+        <li>For this and every take-home lab, <strong>ONLY ONE PARTNER SHOULD SUBMIT THE ASSIGNMENT FOR YOUR TEAM</strong>.  Do not send two copies, one from each partner. <strong class="uline">We will withhold marks if both partners submit the assignment for your team</strong>.</li>
+        <li>Submit the zip folder using <a href="https://my.cs.ubc.ca/docs/hand-in">handin</a>.  The course is <strong>cs259</strong> and the assignment is <strong>lab2_L1X</strong>, where X is your lab section (capital letter, not lower-case).&nbsp; Be careful: handin is CASE SENSITIVE!</li>
+        <li>If you submit your assignment, make changes, and want to submit it again, make sure you submit it using the same Department of Computer Science Account ID. <strong>Do not resubmit the assignment using a different partner's ID</strong>.</li>
+    </ol>
+    <p><strong>Late assignments</strong> will be accepted, however there is a penalty of 25% per day.  Suppose your lab is on Monday, so your take-home assignment is due Sunday night at 23:59 PM.  If you submit your assignment between 00:00 on Monday and 23:59 PM on Monday, you will lose 25%.  If you submit your assignment between 00:00 AM on Tuesday and 23:59 PM on Tuesday, you will lose 50%.  If you submit your assignment between 0:00 on Wednesday and 23:59 PM on Wednesday, you will lose 75%.  Assignments submitted after 23:59 on Wednesday will earn 0.</p>
+    <p><strong>Marks</strong> will be assigned based on: correctness of code (does your program compile and pass all of the tests), clarity of code, and code style.  Your code must be well-formatted and well-commented.  Use the code in the framework and the textbook for code style and formatting guidelines.  Be consistent.</p>
+    
+    <!-- HINTS -->
+    <h2 id="hints">6. Hints</h2>
+    <ol>
+        <li>You may not use global variables.  All <strong>variables</strong> must be defined inside functions.</li>
+        <li>If you are prevented from compiling by a <strong>LNK2019</strong> error, this usually means that a function which hasn't been implemented yet is being invoked.</li>
+        <li>The debugger is your friend and helper.  Set breakpoints and execute the debugger after you write a block of code.  Did you know you can add and remove breakpoints during a debugging session?  You can also restart a debugging session by pressing <strong>Control+Shift+F5</strong>, or by selecting the litle blue square with the white arrow in it on the debugging section of the Visual Studio 2012 Professional menu bar.</li>
+        <li>We have taken some 'biological' liberty in the take-home lab in order to introduce string matching and searches.  DNA profiling actually works by comparing the lengths of specific regions in our DNA, and not by literally matching sequences.  The program you are writing performs a simple version of sequence alignment which can be used for such things as calculating evolutionary distance.  For additional reading (which we recommend!), see Wikipedia's article about <a href="http://en.wikipedia.org/wiki/Sequence_alignment" title="Sequence Alignment">Sequence Alignment</a>.</li>
+        <li>Here are some examples to help you develop your algorithm:
+            <ol>
+                <li><strong>Example 1:  If sample substring AAAGGG is found within candidate string CTCAAAGGGTAT, is it a "perfect match"?  Or do we need to compute the scores (since the lengths are unequal)?</strong><br />
+                    A perfect match is exactly the same length, and contains exactly the same nucleotides.  We'll justify this by assuming that the sample and candidate segments are all taken from between two well-established marker sequences, so a sample perfectly matches a candidate if and only if a) they are the same length, and b) they contain the same nucleotides.<br />
+                    Since in this example the sample is shorter than the candidate, we'll have to determine the score:
+                    <ol>
+                        <li>There are 2 codons (6 nucleotides aka bases) in the sample and we'll start from the left</li>
+                        <li>Nothing for codon match of AAA and CTC</li>
+                        <li>AAA (lysine) and CTC's (leucine) amino acids are different, so no points</li>
+                        <li>None of the 3 pairs of nucleotides match (A-C, A-T, A-C), so no points</li>
+                        <li>A-C isn't a matching base pair;  A-T is, so add 1;  A-C isn't</li>
+                        <li>Score so far:  0 + 1 + 0 = 1 point</li>
+                        <li>Next pair of codons (GGG vs. AAA)</li>
+                        <li>Nothing for codon match of GGG and AAA</li>
+                        <li>GGG (glysine) and AAA's (lysine) amino acids are different, so nothing</li>
+                        <li>None of the 3 pairs of nucleotides match, so nothing</li>
+                        <li>G-A isn't a matching base pair, so 0 points</li>
+                        <li>Score for this pair of codons:  0 points</li>
+                        <li>Score for this comparison: 1 points</li>
+                        <li>At the end of the two codons we shift one codon over in the candidate string, so we ignore the CTC in the candidate and we're now comparing AAAGGG in sample to the first two codons in AAAGGGTAT</li>
+                        <li>10 points for matching AAA to AAA</li>
+                        <li>10 points for matching GGG to GGG</li>
+                        <li>Score for this one = 20</li>
+                        <li>Best score so far is 20 points</li>
+                        <li>Shift one codon over in the candidate string, so that we're comparing AAAGGG to GGGTAT</li>
+                        <li>etc...</li>
+                    </ol>
+                    The best score for this candidate string will be 20 points.</li>
+                <li><strong>Example 2:  Are AAAGGGT and AAAGGGA perfect matches?</strong><br />
+                    No.<br />
+                    We are comparing codons, so AAAGGGT and AAAGGGA gives a perfect score of 20 (AAA=AAA and GGG = GGG).  Although it is true that we are ignoring trailing nucleotides, this is a perfect score, but not a perfect match because a perfect match would also match the trailing nucleotides (T in the sample, and A in the candidate).<br />
+                    The score for this candidate string will be 20.</li>
+                <li><strong>Example 3:  Are AAAGGGT and AAAGGGT perfect matches?</strong><br />
+                    Yes.<br />
+                    We compare the length of the two segments, and they have the same length.  We compare the contents of the two segments (and we can do this quickly with a helpful C function from the string.h library), and we find that the two strings are identical.<br />
+                    This is a perfect match.  We will check any other candidate segments to see if they are also perfect matches.  Once we do that, we are done, we do not need to determine any scores, we report the candidates who are perfect matches.</li>
+                <li><strong>Example 4:  Is sample AAAGGGT  found in candidate string TTTAAAT?</strong><br />
+                    Note that during our scoring algorithm, we are not comparing the last letter ("T") because we only compare numbers of codons that are integers (not fractions) and not trailing nucleotides.  In this case:
+                    <ol>
+                        <li>There are 2 codons in the sample string, and we'll start from the left</li>
+                        <li>Nothing for codon match of AAA and TTT</li>
+                        <li>AAA (lysine) and TTT's (phenylalanine) amino acids are different, so no points</li>
+                        <li>None of the 3 pairs of nucleotides match (A-T, A-T, A-T), so no points</li>
+                        <li>A-T is a matching base pair, so each match earns 1 point, for a total of 3</li>
+                        <li>Score so far:  3 points</li>
+                        <li>Compare 2nd codons of each (i.e., GGG vs. AAA)</li>
+                        <li>We add nothing for each of the non-matching base pairs</li>
+                        <li>Score so far: 3 points</li>
+                        <li>End of two codons; shift one codon over in the candidate string, so we ignore the TTT in the candidate and we're now comparing AAAGGGT in sample to AAAT (note that the sample no longer fits in the candidate, it extends past the end)</li>
+                        <li>We stop comparing because the sample is longer than the segment of candidate being compared</li>
+                    </ol>
+                    The score for this candidate string will be 3 points.</li>
+                <li><strong>Example 5:  Is sample AAATTT found in candidate string GGGAAA?</strong>
+                    <ol>
+                        <li>There are 2 codons in the sample, and we'll start from left</li>
+                        <li>Nothing for codon match of AAA and GGG</li>
+                        <li>AAA (lysine) and GGG's (glycine) amino acids are different, so no points</li>
+                        <li>None of the 3 pairs of nucleotides match (A-G, A-G, A-G), so no points</li>
+                        <li>A-G isn't a matching base pair, so 0 points</li>
+                        <li>Score so far:  0 points</li>
+                        <li>Now try 2nd pair of codons (i.e., TTT vs. AAA)</li>
+                        <li>Each of T-A is a matching base pair (so +1 three times)</li>
+                        <li>Score so far: 3 points</li>
+                        <li>End of two codons; shift one codon over in the candidate string, so we ignore the GGG in the candidate and we're now comparing AAATTT in sample to AAA (note that the sample no longer fits in the candidate, it extends past the end)</li>
+                        <li>We stop comparing because the sample is longer than the segment of candidate being compared</li>
+                    </ol>
+                    The score for this candidate string will be 3 points.</li>
+            </ol>
+        </li>
+    </ol>
+</div>
+<!-- End of .container -->
+</body>
+</html>

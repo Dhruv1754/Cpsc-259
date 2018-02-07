@@ -1,0 +1,3 @@
+﻿  lab1_inlab_exercises.c
+c:\users\u\desktop\cpsc259_2017w1_lab1_inlabexercises\cpsc259_2017w1_lab1_inlabexercises\cpsc259_2017w1_lab1_inlabexercises\lab1_inlab_exercises.c(180): warning C4715: 'is_palindrome': not all control paths return a value
+  CPSC259_2017W1_Lab1_InLabExercises.vcxproj -> C:\Users\u\Desktop\CPSC259_2017W1_Lab1_InLabExercises\CPSC259_2017W1_Lab1_InLabExercises\Debug\CPSC259_2017W1_Lab1_InLabExercises.exe
